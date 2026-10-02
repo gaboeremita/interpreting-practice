@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* Palette tokens flip with the system theme, so components never need dark: variants. */
+:root {
+  --palette-canvas: #eef2f4;
+  --palette-surface: #ffffff;
+  --palette-surface-2: #e2e9ed;
+  --palette-ink: #12232e;
+  --palette-ink-soft: #4a5d69;
+  --palette-line: #c9d5dc;
+  --palette-accent: #0b6e78;
+  --palette-accent-ink: #ffffff;
+  --palette-live: #d9482b;
+  --palette-good: #1f7a4a;
+  --palette-warn: #b56a00;
+  --palette-bad: #b3261e;
+  --palette-good-bg: #dcefe3;
+  --palette-warn-bg: #f6e7cc;
+  --palette-bad-bg: #f6dcd9;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --palette-canvas: #0d171d;
+    --palette-surface: #15232b;
+    --palette-surface-2: #1d2f39;
+    --palette-ink: #e5eef2;
+    --palette-ink-soft: #9db1bc;
+    --palette-line: #2b404c;
+    --palette-accent: #4fc1cc;
+    --palette-accent-ink: #062a2e;
+    --palette-live: #ff7a5c;
+    --palette-good: #6fd39a;
+    --palette-warn: #f2b155;
+    --palette-bad: #ff8a80;
+    --palette-good-bg: #173a29;
+    --palette-warn-bg: #3d2d12;
+    --palette-bad-bg: #44201d;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-canvas: var(--palette-canvas);
+  --color-surface: var(--palette-surface);
+  --color-surface-2: var(--palette-surface-2);
+  --color-ink: var(--palette-ink);
+  --color-ink-soft: var(--palette-ink-soft);
+  --color-line: var(--palette-line);
+  --color-accent: var(--palette-accent);
+  --color-accent-ink: var(--palette-accent-ink);
+  --color-live: var(--palette-live);
+  --color-good: var(--palette-good);
+  --color-warn: var(--palette-warn);
+  --color-bad: var(--palette-bad);
+  --color-good-bg: var(--palette-good-bg);
+  --color-warn-bg: var(--palette-warn-bg);
+  --color-bad-bg: var(--palette-bad-bg);
+}
+
+@theme {
+  --font-sans: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-canvas font-sans leading-normal text-ink;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display leading-tight text-balance;
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    @apply outline-3 outline-offset-2 outline-accent;
+  }
+}

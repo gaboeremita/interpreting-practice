@@ -1,0 +1,32 @@
+{
+  "name": "@isa-drill-room/server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "REST API for ISA Drill Room: drill content and learner progress.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "helmet": "^8.3.0",
+    "mongoose": "^9.10.3",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@isa-drill-room/shared": "*",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.15.0",
+    "@types/supertest": "^7.2.1",
+    "supertest": "^7.3.0",
+    "tsx": "^4.23.15",
+    "vitest": "^5.0.3"
+  }
+}
