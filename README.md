@@ -144,6 +144,11 @@ The terminology comes from the LanguageLine L4 Core Terminology list and the IMI
 Those lists belong to their publishers and are included for personal exam practice. The practice lines and
 protocol quiz were written for this app. Sources for the exam facts are linked in the app's **Game plan** tab.
 
+The L4 list leaves 33 terms without a Spanish translation (for example "cystitis" and "prognosis"). Their
+translations are standard medical Spanish written for this app and live in
+[`server/src/content/data/l4-supplement.json`](server/src/content/data/l4-supplement.json), apart from the official
+list. Check them against your course materials and edit that file if your school uses different wording.
+
 ## License
 
 The code is released under the [MIT License](LICENSE). The glossary content is not covered by that license.
