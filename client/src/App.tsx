@@ -12,6 +12,7 @@ import { useBootstrap } from "./hooks/useBootstrap";
 import { useDrillContent } from "./hooks/useDrillContent";
 import { useProgress } from "./hooks/useProgress";
 import { getLearnerId } from "./lib/learnerId";
+import { GlossaryView } from "./views/GlossaryView";
 import { PlanView } from "./views/PlanView";
 import { ProtocolView } from "./views/ProtocolView";
 import { SettingsView } from "./views/SettingsView";
@@ -77,6 +78,7 @@ function AppShell() {
           </Banner>
         )}
         {activeTab === "ladder" && <TrainingScreen dueCount={dueCount} />}
+        {activeTab === "glossary" && <GlossaryView />}
         {activeTab === "protocol" && <ProtocolView />}
         {activeTab === "plan" && <PlanView />}
         {activeTab === "settings" && <SettingsView />}

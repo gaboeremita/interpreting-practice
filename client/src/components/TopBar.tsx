@@ -1,9 +1,10 @@
 import { classNames } from "../lib/classNames";
 
-export type TabName = "ladder" | "protocol" | "plan" | "settings";
+export type TabName = "ladder" | "glossary" | "protocol" | "plan" | "settings";
 
 const TABS: Array<{ name: TabName; label: string }> = [
   { name: "ladder", label: "Ladder" },
+  { name: "glossary", label: "Glossary" },
   { name: "protocol", label: "Protocol" },
   { name: "plan", label: "Game plan" },
   { name: "settings", label: "Settings" },
