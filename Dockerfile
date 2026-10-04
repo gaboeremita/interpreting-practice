@@ -21,6 +21,6 @@ RUN npm ci --omit=dev --workspace server --include-workspace-root=false && npm c
 COPY --from=build /app/server/dist server/dist
 COPY --from=build /app/client/dist client/dist
 USER node
-EXPOSE 3001
-HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:3001/api/health || exit 1
+EXPOSE 4004
+HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:4004/api/health || exit 1
 CMD ["node", "server/dist/index.js"]

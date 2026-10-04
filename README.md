@@ -80,7 +80,7 @@ docker compose up -d mongo   # or point MONGODB_URI at your own MongoDB
 npm run dev
 ```
 
-Open <http://localhost:5173>. Vite serves the client and forwards `/api` calls to the server on port 3001.
+Open <http://localhost:5173>. Vite serves the client and forwards `/api` calls to the server on port 4004.
 
 ### Run it with Docker
 
@@ -88,7 +88,7 @@ Open <http://localhost:5173>. Vite serves the client and forwards `/api` calls t
 docker compose up --build
 ```
 
-Open <http://localhost:3001>. In production the server serves the built client itself.
+Open <http://localhost:4004>. In production the server serves the built client itself.
 
 ## Scripts
 
@@ -110,7 +110,7 @@ The MongoDB repository test runs only when `TEST_MONGODB_URI` is set. CI sets it
 
 | Variable       | Default    | Description                                                         |
 | -------------- | ---------- | ------------------------------------------------------------------- |
-| `PORT`         | `3001`     | Port the API listens on                                             |
+| `PORT`         | `4004`     | Port the API listens on                                             |
 | `MONGODB_URI`  | (required) | MongoDB connection string                                           |
 | `CORS_ORIGINS` | empty      | Comma-separated origins allowed to call the API from another origin |
 

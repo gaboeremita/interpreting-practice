@@ -19,10 +19,10 @@ services:
       mongo:
         condition: service_healthy
     environment:
-      PORT: 3001
+      PORT: 4004
       MONGODB_URI: mongodb://mongo:27017/isa-drill-room
     ports:
-      - "3001:3001"
+      - "4004:4004"
 
 volumes:
   mongo-data:

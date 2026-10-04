@@ -3,7 +3,7 @@ import path from "node:path";
 import { z } from "zod";
 
 const envSchema = z.object({
-  PORT: z.coerce.number().int().min(1).max(65_535).default(3001),
+  PORT: z.coerce.number().int().min(1).max(65_535).default(4004),
   MONGODB_URI: z.string().startsWith("mongodb"),
   CORS_ORIGINS: z
     .string()
