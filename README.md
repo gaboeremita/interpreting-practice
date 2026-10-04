@@ -108,29 +108,58 @@ The MongoDB repository test runs only when `TEST_MONGODB_URI` is set. CI sets it
 
 ## Environment variables
 
-| Variable       | Default    | Description                                                         |
-| -------------- | ---------- | ------------------------------------------------------------------- |
-| `PORT`         | `4004`     | Port the API listens on                                             |
-| `MONGODB_URI`  | (required) | MongoDB connection string                                           |
-| `CORS_ORIGINS` | empty      | Comma-separated origins allowed to call the API from another origin |
+| Variable        | Default    | Description                                                           |
+| --------------- | ---------- | --------------------------------------------------------------------- |
+| `PORT`          | `4004`     | Port the API listens on                                               |
+| `MONGODB_URI`   | (required) | MongoDB connection string                                             |
+| `CORS_ORIGINS`  | empty      | Comma-separated origins allowed to call the API from another origin   |
+| `PIPER_TTS_URL` | empty      | Base URL of a Piper server for natural voices (see [Voices](#voices)) |
 
 ## API
 
 All endpoints are under `/api`. `:learnerId` is a UUID.
 
-| Method   | Path                              | Description                                         |
-| -------- | --------------------------------- | --------------------------------------------------- |
-| `GET`    | `/health`                         | Health check                                        |
-| `GET`    | `/content`                        | Every drill item and quiz question                  |
-| `GET`    | `/learners/:learnerId/progress`   | The learner's progress (empty if nothing saved yet) |
-| `DELETE` | `/learners/:learnerId/progress`   | Resets scores and boxes, keeps scripts and settings |
-| `POST`   | `/learners/:learnerId/sessions`   | Records a finished sprint and returns the outcome   |
-| `PATCH`  | `/learners/:learnerId/settings`   | Updates some settings                               |
-| `PUT`    | `/learners/:learnerId/scripts`    | Saves the learner's protocol scripts                |
-| `PUT`    | `/learners/:learnerId/unlock-all` | Unlocks or relocks every rung                       |
+| Method   | Path                              | Description                                             |
+| -------- | --------------------------------- | ------------------------------------------------------- |
+| `GET`    | `/health`                         | Health check                                            |
+| `GET`    | `/content`                        | Every drill item and quiz question                      |
+| `GET`    | `/learners/:learnerId/progress`   | The learner's progress (empty if nothing saved yet)     |
+| `DELETE` | `/learners/:learnerId/progress`   | Resets scores and boxes, keeps scripts and settings     |
+| `POST`   | `/learners/:learnerId/sessions`   | Records a finished sprint and returns the outcome       |
+| `PATCH`  | `/learners/:learnerId/settings`   | Updates some settings                                   |
+| `PUT`    | `/learners/:learnerId/scripts`    | Saves the learner's protocol scripts                    |
+| `PUT`    | `/learners/:learnerId/unlock-all` | Unlocks or relocks every rung                           |
+| `GET`    | `/voice/piper`                    | Whether Piper is up, and its English and Spanish voices |
+| `POST`   | `/voice/speech`                   | Speaks `{ voice, text, rate }` with Piper, as WAV       |
 
 Request and response shapes live in [`shared/src/index.d.ts`](shared/src/index.d.ts). Invalid input gets a `422`
 with the list of problems.
+
+## Voices
+
+Prompts are read aloud with the browser's built-in voices unless you run [Piper](https://github.com/OHF-Voice/piper1-gpl),
+a free text-to-speech engine that runs on your own computer and sounds far more natural. The API proxies Piper and
+caches each clip in memory, so a phrase is only generated once.
+
+Install Piper with [uv](https://docs.astral.sh/uv/) in a folder of its own, and download an English and a Mexican Spanish voice:
+
+```bash
+mkdir -p ~/piper-tts && cd ~/piper-tts
+uv venv --python 3.12
+uv pip install "piper-tts[http]"
+uv run python -m piper.download_voices en_US-lessac-high en_US-ryan-high es_MX-claude-high es_MX-ald-medium
+```
+
+Start it from that folder (port 5000 is taken by AirPlay on macOS, hence 5050):
+
+```bash
+uv run python -m piper.http_server -m es_MX-claude-high --port 5050
+```
+
+Set `PIPER_TTS_URL=http://localhost:5050` in `.env` (docker compose points at `host.docker.internal:5050` by
+default), then pick **Piper** under **Voices** in Settings. Every voice downloaded into the Piper folder shows up in
+the voice lists; browse the rest at [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices). If Piper
+stops answering, the app falls back to the browser voices.
 
 ## Privacy
 

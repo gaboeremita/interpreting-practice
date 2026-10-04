@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 
 const settingsSchema = new Schema(
   {
+    voiceSource: { type: String, enum: ["browser", "piper"], default: "browser" },
     enVoice: { type: String, default: "" },
     esVoice: { type: String, default: "" },
     rate: { type: Number, default: 0.95 },

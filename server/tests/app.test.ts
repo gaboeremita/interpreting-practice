@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { createApp } from "../src/app.js";
 import { ContentCatalog } from "../src/content/contentCatalog.js";
 import { ProgressService } from "../src/progress/progressService.js";
+import { VoiceService } from "../src/voice/voiceService.js";
+import { FakeSynthesizer } from "./support/fakeSynthesizer.js";
 import { InMemoryProgressRepository } from "./support/inMemoryProgressRepository.js";
 
 const learnerId = "3f0b8f5e-6a3b-4b8e-9c55-2d1a7a0f4c11";
@@ -15,6 +17,7 @@ describe("HTTP API", () => {
     app = createApp({
       catalog,
       progressService: new ProgressService(new InMemoryProgressRepository(), catalog),
+      voiceService: new VoiceService(new FakeSynthesizer([{ id: "es_MX-claude-high", lang: "es" }])),
       corsOrigins: [],
     });
   });
@@ -83,6 +86,29 @@ describe("HTTP API", () => {
       .set("Content-Type", "application/json")
       .send("{not json")
       .expect(400);
+  });
+
+  it("reports Piper's voices", async () => {
+    const response = await request(app).get("/api/voice/piper").expect(200);
+    expect(response.body).toEqual({ available: true, voices: [{ id: "es_MX-claude-high", lang: "es" }] });
+  });
+
+  it("returns synthesized speech as WAV", async () => {
+    const response = await request(app)
+      .post("/api/voice/speech")
+      .send({ voice: "es_MX-claude-high", text: "  Hola  ", rate: 1 })
+      .expect("Content-Type", "audio/wav")
+      .expect(200);
+
+    expect(response.body.toString()).toBe("es_MX-claude-high:1:Hola");
+  });
+
+  it("validates speech requests", async () => {
+    await request(app)
+      .post("/api/voice/speech")
+      .send({ voice: "es_MX-claude-high", text: "", rate: 1 })
+      .expect(422);
+    await request(app).post("/api/voice/speech").send({ voice: "Bella", text: "Hello", rate: 1 }).expect(422);
   });
 
   it("answers unknown API routes with a 404", async () => {

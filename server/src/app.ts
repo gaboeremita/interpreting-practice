@@ -9,10 +9,13 @@ import { createContentRouter } from "./content/contentRoutes.js";
 import { errorHandler, notFoundHandler } from "./http/errorHandler.js";
 import { createProgressRouter } from "./progress/progressRoutes.js";
 import type { ProgressService } from "./progress/progressService.js";
+import { createVoiceRouter } from "./voice/voiceRoutes.js";
+import type { VoiceService } from "./voice/voiceService.js";
 
 export interface AppDependencies {
   catalog: ContentCatalog;
   progressService: ProgressService;
+  voiceService: VoiceService;
   corsOrigins: string[];
   /** Built client to serve from the same origin. Skipped when the folder doesn't exist. */
   clientDistPath?: string;
@@ -21,6 +24,7 @@ export interface AppDependencies {
 export function createApp({
   catalog,
   progressService,
+  voiceService,
   corsOrigins,
   clientDistPath,
 }: AppDependencies): Express {
@@ -50,6 +54,7 @@ export function createApp({
   });
   app.use("/api/content", createContentRouter(catalog));
   app.use("/api/learners/:learnerId", createProgressRouter(progressService));
+  app.use("/api/voice", createVoiceRouter(voiceService));
   app.use("/api", notFoundHandler);
 
   if (clientDistPath && existsSync(clientDistPath)) {

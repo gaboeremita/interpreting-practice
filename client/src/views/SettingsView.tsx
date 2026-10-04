@@ -1,4 +1,4 @@
-import type { SpanishLocale } from "@isa-drill-room/shared";
+import type { Lang, SpanishLocale, VoiceSource } from "@isa-drill-room/shared";
 import { useEffect, useState } from "react";
 import { ListeningBox } from "../components/ListeningBox";
 import { Button } from "../components/ui/Button";
@@ -6,7 +6,7 @@ import { PageIntro } from "../components/ui/PageIntro";
 import { Panel } from "../components/ui/Panel";
 import { Verdict } from "../components/ui/Verdict";
 import { useProgress } from "../hooks/useProgress";
-import { useVoices } from "../hooks/useVoices";
+import { usePiperStatus, useVoices } from "../hooks/useVoices";
 import { microphoneService, speechService } from "../services";
 
 interface MicTest {
@@ -19,7 +19,17 @@ const fieldClasses = "border-line bg-canvas text-ink max-w-full rounded-lg borde
 export function SettingsView() {
   const { progress, updateSettings, resetProgress } = useProgress();
   const settings = progress.settings;
-  const voices = useVoices();
+  const browserVoices = useVoices();
+  const piper = usePiperStatus();
+  const usesPiper = settings.voiceSource === "piper";
+  const voiceOptions = (lang: Lang): VoiceOption[] =>
+    usesPiper
+      ? piper.voices
+          .filter((voice) => voice.lang === lang)
+          .map((voice) => ({ value: voice.id, label: voice.id }))
+      : browserVoices
+          .filter((voice) => voice.lang.toLowerCase().startsWith(lang))
+          .map((voice) => ({ value: voice.name, label: voice.name }));
   const [micTest, setMicTest] = useState<MicTest>({
     isListening: false,
     text: microphoneService.isInFrame
@@ -29,6 +39,13 @@ export function SettingsView() {
   const [isConfirmingReset, setIsConfirmingReset] = useState(false);
 
   useEffect(() => () => microphoneService.cancel(), []);
+  // Picks up a Piper server started (or a voice downloaded) since the page loaded.
+  useEffect(() => void speechService.refreshPiper(), []);
+
+  function changeVoiceSource(voiceSource: VoiceSource) {
+    // Voice names don't carry over between sources, so both languages go back to automatic.
+    updateSettings({ voiceSource, enVoice: "", esVoice: "" });
+  }
 
   async function testMicrophone() {
     const status = await microphoneService.ensureAccess();
@@ -78,17 +95,40 @@ export function SettingsView() {
           </Verdict>
         )}
 
+        <div className="grid gap-1.5">
+          <label htmlFor="voice-source" className="font-bold">
+            Voices
+          </label>
+          <select
+            id="voice-source"
+            value={settings.voiceSource}
+            onChange={(event) => changeVoiceSource(event.target.value as VoiceSource)}
+            className={fieldClasses}
+          >
+            <option value="browser">Browser voices</option>
+            <option value="piper" disabled={!piper.available && !usesPiper}>
+              Piper (natural voices, runs on your computer){piper.available ? "" : " — not running"}
+            </option>
+          </select>
+          {usesPiper && !piper.available && (
+            <p className="text-sm text-ink-soft">
+              Piper isn't answering, so the browser voices are speaking for now. Start the Piper server and
+              reopen this page.
+            </p>
+          )}
+        </div>
+
         <VoiceSelect
           id="voice-es"
           label="Spanish voice"
-          voices={voices.filter((voice) => voice.lang.toLowerCase().startsWith("es"))}
+          options={voiceOptions("es")}
           value={settings.esVoice}
           onChange={(esVoice) => updateSettings({ esVoice })}
         />
         <VoiceSelect
           id="voice-en"
           label="English voice"
-          voices={voices.filter((voice) => voice.lang.toLowerCase().startsWith("en"))}
+          options={voiceOptions("en")}
           value={settings.enVoice}
           onChange={(enVoice) => updateSettings({ enVoice })}
         />
@@ -174,15 +214,20 @@ export function SettingsView() {
   );
 }
 
+interface VoiceOption {
+  value: string;
+  label: string;
+}
+
 interface VoiceSelectProps {
   id: string;
   label: string;
-  voices: readonly SpeechSynthesisVoice[];
+  options: readonly VoiceOption[];
   value: string;
   onChange: (voiceName: string) => void;
 }
 
-function VoiceSelect({ id, label, voices, value, onChange }: VoiceSelectProps) {
+function VoiceSelect({ id, label, options, value, onChange }: VoiceSelectProps) {
   return (
     <div className="grid gap-1.5">
       <label htmlFor={id} className="font-bold">
@@ -195,9 +240,9 @@ function VoiceSelect({ id, label, voices, value, onChange }: VoiceSelectProps) {
         className={fieldClasses}
       >
         <option value="">Automatic</option>
-        {voices.map((voice) => (
-          <option key={voice.voiceURI} value={voice.name}>
-            {voice.name}
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
           </option>
         ))}
       </select>

@@ -5,6 +5,8 @@ import { ContentCatalog } from "./content/contentCatalog.js";
 import { connectToMongo, disconnectFromMongo } from "./db/mongo.js";
 import { MongoProgressRepository } from "./progress/mongoProgressRepository.js";
 import { ProgressService } from "./progress/progressService.js";
+import { PiperClient } from "./voice/piperClient.js";
+import { VoiceService } from "./voice/voiceService.js";
 
 const env = loadEnv();
 await connectToMongo(env.MONGODB_URI);
@@ -13,6 +15,7 @@ const catalog = ContentCatalog.fromBundledData();
 const app = createApp({
   catalog,
   progressService: new ProgressService(new MongoProgressRepository(), catalog),
+  voiceService: new VoiceService(env.PIPER_TTS_URL ? new PiperClient(env.PIPER_TTS_URL) : null),
   corsOrigins: env.CORS_ORIGINS,
   clientDistPath: path.resolve(import.meta.dirname, "../../client/dist"),
 });
