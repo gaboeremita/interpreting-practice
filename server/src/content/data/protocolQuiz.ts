@@ -1,4 +1,4 @@
-import type { QuizQuestion } from "@isa-drill-room/shared";
+import type { QuizQuestion } from "@interpreting-practice/shared";
 
 /** Protocol scenarios. Every rule here is backed by the sources listed in the client's Game plan view. */
 export const protocolQuiz: QuizQuestion[] = [
@@ -73,7 +73,7 @@ export const protocolQuiz: QuizQuestion[] = [
       "Session management exists so you don't receive more than you can retain. Asking for a repeat beats an omission or a guess.",
   },
   {
-    question: 'You render "take it today, not tomorrow" as "tómelo pronto". What did the rater just mark?',
+    question: 'You render "take it today, not tomorrow" as "tómelo pronto". What went wrong?',
     options: [
       "Nothing, the meaning is close.",
       "A distortion: the time detail changed.",
@@ -92,6 +92,6 @@ export const protocolQuiz: QuizQuestion[] = [
     ],
     answerIndex: 0,
     explanation:
-      "LanguageLine tells clients to let the interpreter open the session with their name and interpreter ID. Use your school's exact script in the Scripts drill.",
+      "Clients are asked to let the interpreter open the session with their name and interpreter ID. Use your exact script in the Scripts drill.",
   },
 ];

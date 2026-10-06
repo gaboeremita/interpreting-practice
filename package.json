@@ -1,8 +1,8 @@
 {
-  "name": "isa-drill-room",
+  "name": "interpreting-practice",
   "version": "1.0.0",
   "private": true,
-  "description": "Spoken drill trainer for the LanguageLine Interpreter Skills Assessment (ISA).",
+  "description": "Spoken drill trainer for interpreting practice, English and Spanish.",
   "license": "MIT",
   "author": "Gabriel <gabrieleremita@gmail.com>",
   "type": "module",

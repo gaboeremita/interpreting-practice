@@ -1,4 +1,4 @@
-import type { SessionOutcome } from "@isa-drill-room/shared";
+import type { SessionOutcome } from "@interpreting-practice/shared";
 import { useState } from "react";
 import { Banner } from "../components/ui/Banner";
 import { Button } from "../components/ui/Button";

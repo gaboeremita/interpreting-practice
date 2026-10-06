@@ -1,4 +1,4 @@
-import type { DrillItem } from "@isa-drill-room/shared";
+import type { DrillItem } from "@interpreting-practice/shared";
 import { describe, expect, it } from "vitest";
 import { buildGlossary, searchGlossary } from "../src/domain/glossary";
 

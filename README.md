@@ -1,9 +1,9 @@
-# ISA Drill Room
+# Interpreting Practice
 
-[![CI](https://github.com/gaboeremita/isa-drill-room/actions/workflows/ci.yml/badge.svg)](https://github.com/gaboeremita/isa-drill-room/actions/workflows/ci.yml)
+[![CI](https://github.com/gaboeremita/interpreting-practice/actions/workflows/ci.yml/badge.svg)](https://github.com/gaboeremita/interpreting-practice/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A spoken drill trainer for the **LanguageLine Interpreter Skills Assessment (ISA)**, English ⇄ Spanish.
+A spoken drill trainer for interpreting practice, English ⇄ Spanish.
 You hear a provider or patient line, say your rendition out loud before the ring runs out, and the app checks it
 against the exact glossary wording.
 
@@ -13,11 +13,11 @@ against the exact glossary wording.
   three lives. Each rung opens once you score 80% on the one before.
 - **Real speech in both directions.** Prompts are read aloud with the browser's voices, and the microphone
   transcribes your answer and grades it against every accepted wording.
-- **Unit scoring for long turns.** Consecutive turns are graded by the pieces a rater checks (numbers, negations,
+- **Unit scoring for long turns.** Consecutive turns are graded by the pieces that carry the meaning (numbers, negations,
   times, register), pre-ticked from what you said.
 - **Leitner review boxes.** Misses come back sooner; "Redo my misses" drills only what you got wrong last time.
 - **XP, combos and a daily streak** to keep short sprints rewarding.
-- **Protocol quiz and script recall** for the interpretation protocol part of the exam.
+- **Protocol quiz and script recall** for interpretation protocol.
 - **Progress saved in MongoDB**, tied to an anonymous id stored in your browser.
 - Light and dark themes that follow your system setting.
 
@@ -34,7 +34,7 @@ against the exact glossary wording.
 ## Project structure
 
 ```
-isa-drill-room/
+interpreting-practice/
 ├── client/                 React app (Vite)
 │   ├── src/
 │   │   ├── api/            HTTP calls to the server
@@ -80,7 +80,7 @@ docker compose up -d mongo   # or point MONGODB_URI at your own MongoDB
 npm run dev
 ```
 
-Open <http://localhost:5173>. Vite serves the client and forwards `/api` calls to the server on port 4004.
+Open <http://localhost:5180>. Vite serves the client and forwards `/api` calls to the server on port 4004.
 
 ### Run it with Docker
 
@@ -123,6 +123,8 @@ All endpoints are under `/api`. `:learnerId` is a UUID.
 | -------- | --------------------------------- | ------------------------------------------------------- |
 | `GET`    | `/health`                         | Health check                                            |
 | `GET`    | `/content`                        | Every drill item and quiz question                      |
+| `PUT`    | `/content/items/:itemId/answer`   | Fixes an item's answer with `{ answer }`                |
+| `DELETE` | `/content/items/:itemId/answer`   | Restores an item's original answer                      |
 | `GET`    | `/learners/:learnerId/progress`   | The learner's progress (empty if nothing saved yet)     |
 | `DELETE` | `/learners/:learnerId/progress`   | Resets scores and boxes, keeps scripts and settings     |
 | `POST`   | `/learners/:learnerId/sessions`   | Records a finished sprint and returns the outcome       |
@@ -167,17 +169,6 @@ There are no accounts. Progress is stored against a random id kept in your brows
 data starts you fresh. Speech recognition runs in the browser: Chrome sends audio to Google to transcribe it and
 Safari uses Apple's service. Recordings of your answers never leave the page.
 
-## Content sources
-
-The terminology comes from the LanguageLine L4 Core Terminology list and the IMIA Pain Description Glossary.
-Those lists belong to their publishers and are included for personal exam practice. The practice lines and
-protocol quiz were written for this app. Sources for the exam facts are linked in the app's **Game plan** tab.
-
-The L4 list leaves 33 terms without a Spanish translation (for example "cystitis" and "prognosis"). Their
-translations are standard medical Spanish written for this app and live in
-[`server/src/content/data/l4-supplement.json`](server/src/content/data/l4-supplement.json), apart from the official
-list. Check them against your course materials and edit that file if your school uses different wording.
-
 ## License
 
-The code is released under the [MIT License](LICENSE). The glossary content is not covered by that license.
+The code is released under the [MIT License](LICENSE).

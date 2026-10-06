@@ -1,4 +1,4 @@
-import type { PiperStatus } from "@isa-drill-room/shared";
+import type { PiperStatus } from "@interpreting-practice/shared";
 import { useSyncExternalStore } from "react";
 import { speechService } from "../services";
 

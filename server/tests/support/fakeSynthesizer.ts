@@ -1,4 +1,4 @@
-import type { VoiceOption } from "@isa-drill-room/shared";
+import type { VoiceOption } from "@interpreting-practice/shared";
 import type { SpeechSynthesizer, SynthesisInput } from "../../src/voice/piperClient.js";
 
 /** Records every call and answers with a clip that spells out its input. */

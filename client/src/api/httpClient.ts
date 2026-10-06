@@ -1,4 +1,4 @@
-import type { ApiError } from "@isa-drill-room/shared";
+import type { ApiError } from "@interpreting-practice/shared";
 
 export class ApiRequestError extends Error {
   constructor(

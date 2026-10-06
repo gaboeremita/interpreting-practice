@@ -1,4 +1,4 @@
-import type { DrillItem, Lang } from "@isa-drill-room/shared";
+import type { DrillItem, Lang } from "@interpreting-practice/shared";
 import type { PracticeLine } from "./data/practiceLines.js";
 import { parseAcceptedOptions } from "./optionParser.js";
 

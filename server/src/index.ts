@@ -2,6 +2,8 @@ import path from "node:path";
 import { createApp } from "./app.js";
 import { loadEnv } from "./config/env.js";
 import { ContentCatalog } from "./content/contentCatalog.js";
+import { ContentService } from "./content/contentService.js";
+import { MongoAnswerFixRepository } from "./content/mongoAnswerFixRepository.js";
 import { connectToMongo, disconnectFromMongo } from "./db/mongo.js";
 import { MongoProgressRepository } from "./progress/mongoProgressRepository.js";
 import { ProgressService } from "./progress/progressService.js";
@@ -13,7 +15,7 @@ await connectToMongo(env.MONGODB_URI);
 
 const catalog = ContentCatalog.fromBundledData();
 const app = createApp({
-  catalog,
+  contentService: new ContentService(catalog, new MongoAnswerFixRepository()),
   progressService: new ProgressService(new MongoProgressRepository(), catalog),
   voiceService: new VoiceService(env.PIPER_TTS_URL ? new PiperClient(env.PIPER_TTS_URL) : null),
   corsOrigins: env.CORS_ORIGINS,
@@ -21,7 +23,7 @@ const app = createApp({
 });
 
 const server = app.listen(env.PORT, () => {
-  console.log(`ISA Drill Room API listening on http://localhost:${env.PORT}`);
+  console.log(`Interpreting Practice API listening on http://localhost:${env.PORT}`);
 });
 
 function shutdown(signal: string): void {

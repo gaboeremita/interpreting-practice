@@ -1,4 +1,4 @@
-import type { Grade, Streak } from "@isa-drill-room/shared";
+import type { Grade, Streak } from "@interpreting-practice/shared";
 
 export const MIN_BOX = 1;
 export const MAX_BOX = 5;

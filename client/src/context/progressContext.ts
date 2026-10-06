@@ -1,4 +1,4 @@
-import type { Progress, SessionOutcome, SessionSubmission, Settings } from "@isa-drill-room/shared";
+import type { Progress, SessionOutcome, SessionSubmission, Settings } from "@interpreting-practice/shared";
 import { createContext } from "react";
 
 export interface ProgressContextValue {

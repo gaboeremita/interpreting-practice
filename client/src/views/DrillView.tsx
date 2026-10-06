@@ -1,4 +1,4 @@
-import type { Grade } from "@isa-drill-room/shared";
+import type { Grade } from "@interpreting-practice/shared";
 import { useState } from "react";
 import { DrillCall } from "../components/DrillCall";
 import { ProgressPips } from "../components/ProgressPips";

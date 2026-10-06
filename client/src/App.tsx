@@ -1,3 +1,4 @@
+import type { ContentResponse } from "@interpreting-practice/shared";
 import { useMemo, useState } from "react";
 import type { TabName } from "./components/TopBar";
 import { TopBar } from "./components/TopBar";
@@ -13,6 +14,7 @@ import { useDrillContent } from "./hooks/useDrillContent";
 import { useProgress } from "./hooks/useProgress";
 import { getLearnerId } from "./lib/learnerId";
 import { GlossaryView } from "./views/GlossaryView";
+import { PhrasesView } from "./views/PhrasesView";
 import { PlanView } from "./views/PlanView";
 import { ProtocolView } from "./views/ProtocolView";
 import { SettingsView } from "./views/SettingsView";
@@ -21,12 +23,14 @@ import { TrainingScreen } from "./views/TrainingScreen";
 export function App() {
   const [learnerId] = useState(getLearnerId);
   const bootstrap = useBootstrap(learnerId);
+  const [replacedContent, setReplacedContent] = useState<ContentResponse | null>(null);
+  const response = replacedContent ?? (bootstrap.status === "ready" ? bootstrap.content : null);
   const content = useMemo<DrillContent | null>(
     () =>
-      bootstrap.status === "ready"
-        ? { bank: buildItemBank(bootstrap.content.items), quiz: bootstrap.content.quiz }
+      response
+        ? { bank: buildItemBank(response.items), quiz: response.quiz, replaceContent: setReplacedContent }
         : null,
-    [bootstrap],
+    [response],
   );
 
   return (
@@ -79,6 +83,7 @@ function AppShell() {
         )}
         {activeTab === "ladder" && <TrainingScreen dueCount={dueCount} />}
         {activeTab === "glossary" && <GlossaryView />}
+        {activeTab === "phrases" && <PhrasesView />}
         {activeTab === "protocol" && <ProtocolView />}
         {activeTab === "plan" && <PlanView />}
         {activeTab === "settings" && <SettingsView />}

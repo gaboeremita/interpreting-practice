@@ -1,4 +1,4 @@
-import type { Lang, SpanishLocale, VoiceSource } from "@isa-drill-room/shared";
+import type { Lang, SpanishLocale, VoiceSource } from "@interpreting-practice/shared";
 import { useEffect, useState } from "react";
 import { ListeningBox } from "../components/ListeningBox";
 import { Button } from "../components/ui/Button";

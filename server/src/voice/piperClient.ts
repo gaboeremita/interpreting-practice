@@ -1,4 +1,4 @@
-import type { Lang, VoiceOption } from "@isa-drill-room/shared";
+import type { Lang, VoiceOption } from "@interpreting-practice/shared";
 import { UpstreamError } from "../errors.js";
 
 export interface SynthesisInput {

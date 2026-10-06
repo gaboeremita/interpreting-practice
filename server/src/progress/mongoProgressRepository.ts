@@ -1,4 +1,4 @@
-import type { Progress, Settings } from "@isa-drill-room/shared";
+import type { Progress, Settings } from "@interpreting-practice/shared";
 import { ProgressModel } from "./progressModel.js";
 import type { ProgressRepository } from "./progressRepository.js";
 

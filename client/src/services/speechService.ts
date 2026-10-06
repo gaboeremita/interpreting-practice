@@ -1,4 +1,4 @@
-import type { Lang, PiperStatus, Settings, SpeechRequest } from "@isa-drill-room/shared";
+import type { Lang, PiperStatus, Settings, SpeechRequest } from "@interpreting-practice/shared";
 import { voiceApi } from "../api/voiceApi";
 
 export type VoicePreferences = Pick<Settings, "voiceSource" | "enVoice" | "esVoice" | "rate">;

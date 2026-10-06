@@ -1,4 +1,4 @@
-import type { SessionOutcome } from "@isa-drill-room/shared";
+import type { SessionOutcome } from "@interpreting-practice/shared";
 import { Router } from "express";
 import { validate } from "../http/validate.js";
 import {

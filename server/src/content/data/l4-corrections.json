@@ -1,0 +1,12 @@
+{
+  "spanish": {
+    "oncology": "oncología",
+    "Advance Directive": "directriz médica anticipada, directriz médica adelantada",
+    "home care": "cuidado(s) en casa, cuidado(s) en el hogar",
+    "liver function test": "prueba de la función hepática, exámenes de la función hepática, análisis de la función hepática",
+    "strep throat": "Infección de la garganta por estreptococos, estreptococos en la garganta, Faringitis estreptocócica"
+  },
+  "english": {
+    "contraception/birth control": "contraception, birth control"
+  }
+}

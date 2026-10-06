@@ -1,4 +1,4 @@
-import type { DrillItem, Grade, Settings } from "@isa-drill-room/shared";
+import type { DrillItem, Grade, Settings } from "@interpreting-practice/shared";
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import type { Level } from "../domain/levels";
 import { isLongItem, secondsFor } from "../domain/sprint";
@@ -282,7 +282,7 @@ export function DrillCall({ item, level, settings, micUsable, onGrade, onQuit }:
           ? isLong
             ? "Talk when the ring starts. It stops listening after a two-second pause."
             : "Talk when the ring starts. It stops listening when you finish the term."
-          : "Say it out loud, Master. Saying it in your head doesn't count, the test is spoken."}
+          : "Say it out loud, Master. Saying it in your head doesn't count, interpreting is spoken."}
       </p>
     </article>
   );

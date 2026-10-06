@@ -1,4 +1,4 @@
-import type { PiperStatus, SpeechRequest } from "@isa-drill-room/shared";
+import type { PiperStatus, SpeechRequest } from "@interpreting-practice/shared";
 import { apiRequest, ApiRequestError } from "./httpClient";
 
 export const voiceApi = {

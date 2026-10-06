@@ -22,6 +22,13 @@ export interface DrillItem {
   units: string[] | null;
   speaker: Speaker | null;
   weight: number;
+  /** The bundled answer, present only when the learner has fixed this item's answer. */
+  original?: string;
+}
+
+export interface AnswerFix {
+  /** The corrected answer, in the same format as the glossary cell or model rendition it replaces. */
+  answer: string;
 }
 
 export interface QuizQuestion {

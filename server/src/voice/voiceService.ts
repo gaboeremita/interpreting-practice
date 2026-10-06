@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type { PiperStatus, SpeechRequest, VoiceOption } from "@isa-drill-room/shared";
+import type { PiperStatus, SpeechRequest, VoiceOption } from "@interpreting-practice/shared";
 import { NotFoundError, ValidationError } from "../errors.js";
 import { AudioCache } from "./audioCache.js";
 import type { SpeechSynthesizer } from "./piperClient.js";

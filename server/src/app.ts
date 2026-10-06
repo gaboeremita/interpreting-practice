@@ -4,8 +4,8 @@ import cors from "cors";
 import type { Express } from "express";
 import express from "express";
 import helmet from "helmet";
-import type { ContentCatalog } from "./content/contentCatalog.js";
 import { createContentRouter } from "./content/contentRoutes.js";
+import type { ContentService } from "./content/contentService.js";
 import { errorHandler, notFoundHandler } from "./http/errorHandler.js";
 import { createProgressRouter } from "./progress/progressRoutes.js";
 import type { ProgressService } from "./progress/progressService.js";
@@ -13,7 +13,7 @@ import { createVoiceRouter } from "./voice/voiceRoutes.js";
 import type { VoiceService } from "./voice/voiceService.js";
 
 export interface AppDependencies {
-  catalog: ContentCatalog;
+  contentService: ContentService;
   progressService: ProgressService;
   voiceService: VoiceService;
   corsOrigins: string[];
@@ -22,7 +22,7 @@ export interface AppDependencies {
 }
 
 export function createApp({
-  catalog,
+  contentService,
   progressService,
   voiceService,
   corsOrigins,
@@ -52,7 +52,7 @@ export function createApp({
   app.get("/api/health", (_request, response) => {
     response.json({ status: "ok" });
   });
-  app.use("/api/content", createContentRouter(catalog));
+  app.use("/api/content", createContentRouter(contentService));
   app.use("/api/learners/:learnerId", createProgressRouter(progressService));
   app.use("/api/voice", createVoiceRouter(voiceService));
   app.use("/api", notFoundHandler);

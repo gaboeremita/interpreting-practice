@@ -1,4 +1,4 @@
-import type { DrillItem } from "@isa-drill-room/shared";
+import type { DrillItem } from "@interpreting-practice/shared";
 import { normalize } from "../lib/text";
 
 export type GlossaryKind = "l4" | "pain";

@@ -1,4 +1,4 @@
-import type { Progress } from "@isa-drill-room/shared";
+import type { Progress } from "@interpreting-practice/shared";
 import type { ProgressRepository } from "../../src/progress/progressRepository.js";
 
 export class InMemoryProgressRepository implements ProgressRepository {

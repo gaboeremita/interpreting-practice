@@ -2,9 +2,11 @@ import request from "supertest";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createApp } from "../src/app.js";
 import { ContentCatalog } from "../src/content/contentCatalog.js";
+import { ContentService } from "../src/content/contentService.js";
 import { ProgressService } from "../src/progress/progressService.js";
 import { VoiceService } from "../src/voice/voiceService.js";
 import { FakeSynthesizer } from "./support/fakeSynthesizer.js";
+import { InMemoryAnswerFixRepository } from "./support/inMemoryAnswerFixRepository.js";
 import { InMemoryProgressRepository } from "./support/inMemoryProgressRepository.js";
 
 const learnerId = "3f0b8f5e-6a3b-4b8e-9c55-2d1a7a0f4c11";
@@ -15,7 +17,7 @@ describe("HTTP API", () => {
   beforeEach(() => {
     const catalog = ContentCatalog.fromBundledData();
     app = createApp({
-      catalog,
+      contentService: new ContentService(catalog, new InMemoryAnswerFixRepository()),
       progressService: new ProgressService(new InMemoryProgressRepository(), catalog),
       voiceService: new VoiceService(new FakeSynthesizer([{ id: "es_MX-claude-high", lang: "es" }])),
       corsOrigins: [],
@@ -30,6 +32,31 @@ describe("HTTP API", () => {
     const response = await request(app).get("/api/content").expect(200);
     expect(response.body.items.length).toBeGreaterThan(500);
     expect(response.body.quiz.length).toBe(8);
+  });
+
+  it("fixes an item's answer and restores the original", async () => {
+    const fixed = await request(app)
+      .put("/api/content/items/l4:0:en/answer")
+      .send({ answer: "reflujo ácido" })
+      .expect(200);
+    const item = fixed.body.items.find((candidate: { id: string }) => candidate.id === "l4:0:en");
+    expect(item.accepted).toEqual(["reflujo ácido"]);
+    expect(item.original).toBe("Reflujo acídico, reflujo gástrico");
+
+    const served = await request(app).get("/api/content").expect(200);
+    expect(served.body.items.find((candidate: { id: string }) => candidate.id === "l4:0:es").prompt).toBe(
+      "reflujo ácido",
+    );
+
+    const restored = await request(app).delete("/api/content/items/l4:0:en/answer").expect(200);
+    const back = restored.body.items.find((candidate: { id: string }) => candidate.id === "l4:0:en");
+    expect(back.display).toBe("Reflujo acídico, reflujo gástrico");
+    expect(back.original).toBeUndefined();
+  });
+
+  it("rejects an empty fix and an unknown item", async () => {
+    await request(app).put("/api/content/items/l4:0:en/answer").send({ answer: "  " }).expect(422);
+    await request(app).put("/api/content/items/l4:9999:en/answer").send({ answer: "x" }).expect(404);
   });
 
   it("rejects a learner id that is not a UUID", async () => {

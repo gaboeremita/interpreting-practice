@@ -1,4 +1,4 @@
-import type { SessionOutcome } from "@isa-drill-room/shared";
+import type { SessionOutcome } from "@interpreting-practice/shared";
 import { useState } from "react";
 import { Button } from "../components/ui/Button";
 import { Eyebrow } from "../components/ui/Eyebrow";
@@ -9,7 +9,7 @@ import { randomItem } from "../lib/random";
 const PEP_TALK = {
   pass: [
     "Clean call, Master. Next rung is open.",
-    "That's a pass. The rater would nod.",
+    "That's a pass. Nothing lost on the way through.",
     "Passed. One more sprint while you're warm?",
   ],
   fail: [

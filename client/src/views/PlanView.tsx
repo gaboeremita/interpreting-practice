@@ -13,36 +13,11 @@ function ExternalLink({ href, children }: { href: string; children: string }) {
 export function PlanView() {
   return (
     <div className="grid gap-4 [&_ol]:grid [&_ol]:list-decimal [&_ol]:gap-1.5 [&_ol]:pl-5.5 [&_ul]:grid [&_ul]:list-disc [&_ul]:gap-1.5 [&_ul]:pl-5.5">
-      <PageIntro title="What you're walking into.">
-        The short version, then how to train for it without hating every minute.
+      <PageIntro title="How to train.">
+        What to watch for, then how to practice without hating every minute.
       </PageIntro>
 
-      <Panel title="The ISA, from LanguageLine's own material">
-        <ul>
-          <li>
-            It's the final exam of LanguageLine Interpreter School, and every interpreter has to pass it.
-          </li>
-          <li>Six components, bidirectional: English into Spanish and Spanish into English.</li>
-          <li>
-            It scores healthcare terminology, accuracy and completeness (memory retention, note-taking,
-            conversion), interpretation protocol, customer service, and language proficiency.
-          </li>
-          <li>The format is consecutive: a speaker finishes a chunk, then you render it.</li>
-        </ul>
-        <SourceNote>
-          Sources:{" "}
-          <ExternalLink href="https://470255.fs1.hubspotusercontent-na1.net/hubfs/470255/LLS-InterpreterQuality_Healthcare.pdf">
-            LanguageLine Interpreter Quality (Healthcare)
-          </ExternalLink>
-          ,{" "}
-          <ExternalLink href="https://www.languageline.com/interpreting/on-demand/interpreter-quality">
-            LanguageLine interpreter quality page
-          </ExternalLink>
-          .
-        </SourceNote>
-      </Panel>
-
-      <Panel title="What raters take points off for">
+      <Panel title="What costs you accuracy">
         <ul>
           <li>
             <b>Omission:</b> anything you dropped, including hedges and repetitions.
@@ -64,21 +39,7 @@ export function PlanView() {
             <b>Protocol:</b> third-person rendering, side conversations, guessing instead of asking.
           </li>
         </ul>
-        <p>
-          LanguageLine's own court test uses a "scoring unit" method where 67% and below fails. The ISA cut
-          score isn't published, so the app asks for 80% before opening the next rung.
-        </p>
-        <SourceNote>
-          Sources:{" "}
-          <ExternalLink href="https://pigment.is/blogs/blogs/interpreter-skills-assessment">
-            Pigment, interpreter skills assessment overview
-          </ExternalLink>
-          ,{" "}
-          <ExternalLink href="https://www.languageline.com/hubfs/Court_Certification_Test.pdf">
-            LanguageLine Court Certification Test Q&amp;A
-          </ExternalLink>
-          .
-        </SourceNote>
+        <p>The app asks for 80% on a rung before opening the next one.</p>
       </Panel>
 
       <Panel title="How this app is built for a brain that won't sit still">
@@ -130,9 +91,9 @@ export function PlanView() {
             Once you pass rung 6, add shadowing off the app: play any Spanish medical video and repeat it a
             few words behind the speaker for two minutes.
           </li>
-          <li>Two or three days before the test, run the boss call once a day and the protocol quiz once.</li>
+          <li>Once a week, run the boss call and the protocol quiz.</li>
         </ol>
-        <p>Test-day setup: a quiet room, a wired headset, water, paper for numbers and negations.</p>
+        <p>Call setup: a quiet room, a wired headset, water, paper for numbers and negations.</p>
       </Panel>
     </div>
   );

@@ -1,4 +1,4 @@
-import type { ContentResponse, Progress } from "@isa-drill-room/shared";
+import type { ContentResponse, Progress } from "@interpreting-practice/shared";
 import { useCallback, useEffect, useState } from "react";
 import { drillApi } from "../api/drillApi";
 import { errorMessageOf } from "../api/httpClient";
