@@ -22,6 +22,13 @@ export interface DrillItem {
   units: string[] | null;
   speaker: Speaker | null;
   weight: number;
+  /** The bundled answer, present only when the learner has fixed this item's answer. */
+  original?: string;
+}
+
+export interface AnswerFix {
+  /** The corrected answer, in the same format as the glossary cell or model rendition it replaces. */
+  answer: string;
 }
 
 export interface QuizQuestion {
@@ -38,7 +45,12 @@ export interface ContentResponse {
 
 export type SpanishLocale = "es-MX" | "es-US";
 
+/** Where voices come from: the browser's own, or the Piper server the API proxies. */
+export type VoiceSource = "browser" | "piper";
+
 export interface Settings {
+  voiceSource: VoiceSource;
+  /** Browser voice name or Piper voice id, depending on the source. Empty picks one automatically. */
   enVoice: string;
   esVoice: string;
   rate: number;
@@ -88,6 +100,23 @@ export interface SessionOutcome {
   score: number;
   previousBest: number;
   xpEarned: number;
+}
+
+export interface VoiceOption {
+  id: string;
+  lang: Lang;
+}
+
+export interface PiperStatus {
+  /** False when Piper isn't configured or didn't answer. */
+  available: boolean;
+  voices: VoiceOption[];
+}
+
+export interface SpeechRequest {
+  voice: string;
+  text: string;
+  rate: number;
 }
 
 export interface ApiError {

@@ -1,9 +1,11 @@
 import { classNames } from "../lib/classNames";
 
-export type TabName = "ladder" | "protocol" | "plan" | "settings";
+export type TabName = "ladder" | "glossary" | "phrases" | "protocol" | "plan" | "settings";
 
 const TABS: Array<{ name: TabName; label: string }> = [
   { name: "ladder", label: "Ladder" },
+  { name: "glossary", label: "Glossary" },
+  { name: "phrases", label: "Phrases" },
   { name: "protocol", label: "Protocol" },
   { name: "plan", label: "Game plan" },
   { name: "settings", label: "Settings" },
@@ -23,7 +25,7 @@ export function TopBar({ xp, streakDays, dueCount, activeTab, onSelectTab }: Top
       <div className="flex items-center gap-2.5">
         <span className="size-2.5 rounded-full bg-live ring-4 ring-live/25" aria-hidden="true" />
         <h1 className="text-[1.35rem] font-extrabold tracking-tight font-stretch-semi-condensed">
-          ISA Drill Room
+          Interpreting Practice
         </h1>
       </div>
       <div className="flex gap-4 text-sm text-ink-soft" aria-live="polite">

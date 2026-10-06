@@ -1,4 +1,4 @@
-import type { Grade } from "@isa-drill-room/shared";
+import type { Grade } from "@interpreting-practice/shared";
 
 /** Speech recognition returns "2" or "dos" unpredictably, so number words are normalized to digits. */
 const NUMBER_WORDS: Record<string, number> = {
@@ -149,10 +149,19 @@ export function countWrongWords(expected: string, attempt: string): number {
   return expectedWords.filter((word, index) => attemptWords[index] !== word).length;
 }
 
-/** Splits a glossary cell for display, e.g. "urticaria, ronchas" → ["urticaria", "ronchas"]. */
+/**
+ * Splits a glossary cell for display, e.g. "urticaria, ronchas" → ["urticaria", "ronchas"].
+ * A slash between two words swaps just that word, so "Prueba/examen de Fenilcetonuria" stays one option;
+ * only a slash with a space beside it separates options, matching the server's grading.
+ */
 export function displayOptions(display: string): string[] {
   return display
-    .split(/[,;/]/)
+    .split(/[,;]|\s+\/\s*|\s*\/\s+/)
     .map((option) => option.trim())
     .filter(Boolean);
+}
+
+/** The first wording of a glossary cell, ready to speak: "Prueba/examen de Fenilcetonuria" → "Prueba de Fenilcetonuria". */
+export function firstWording(display: string): string {
+  return (displayOptions(display)[0] ?? display).replace(/\/[^\s)]+/g, "");
 }

@@ -1,8 +1,8 @@
 {
-  "name": "@isa-drill-room/server",
+  "name": "@interpreting-practice/server",
   "version": "1.0.0",
   "private": true,
-  "description": "REST API for ISA Drill Room: drill content and learner progress.",
+  "description": "REST API for Interpreting Practice: drill content and learner progress.",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -20,7 +20,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@isa-drill-room/shared": "*",
+    "@interpreting-practice/shared": "*",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^22.15.0",

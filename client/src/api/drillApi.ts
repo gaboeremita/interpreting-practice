@@ -1,16 +1,25 @@
 import type {
+  AnswerFix,
   ContentResponse,
   Progress,
   SessionOutcome,
   SessionSubmission,
   Settings,
-} from "@isa-drill-room/shared";
+} from "@interpreting-practice/shared";
 import { apiRequest } from "./httpClient";
 
 const learnerPath = (learnerId: string) => `/learners/${encodeURIComponent(learnerId)}`;
 
 export const drillApi = {
   getContent: () => apiRequest<ContentResponse>("GET", "/content"),
+
+  fixAnswer: (itemId: string, answer: string) =>
+    apiRequest<ContentResponse>("PUT", `/content/items/${encodeURIComponent(itemId)}/answer`, {
+      answer,
+    } satisfies AnswerFix),
+
+  restoreAnswer: (itemId: string) =>
+    apiRequest<ContentResponse>("DELETE", `/content/items/${encodeURIComponent(itemId)}/answer`),
 
   getProgress: (learnerId: string) => apiRequest<Progress>("GET", `${learnerPath(learnerId)}/progress`),
 

@@ -1,4 +1,4 @@
-import type { Grade } from "@isa-drill-room/shared";
+import type { Grade } from "@interpreting-practice/shared";
 import { classNames } from "../lib/classNames";
 
 const GRADE_CLASSES: Record<Grade, string> = { got: "bg-good", close: "bg-warn", miss: "bg-bad" };

@@ -19,10 +19,14 @@ services:
       mongo:
         condition: service_healthy
     environment:
-      PORT: 3001
-      MONGODB_URI: mongodb://mongo:27017/isa-drill-room
+      PORT: 4004
+      MONGODB_URI: mongodb://mongo:27017/interpreting-practice
+      # Piper runs on the host, outside Docker. Set PIPER_TTS_URL to empty to turn it off.
+      PIPER_TTS_URL: ${PIPER_TTS_URL-http://host.docker.internal:5050}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
-      - "3001:3001"
+      - "4004:4004"
 
 volumes:
   mongo-data:

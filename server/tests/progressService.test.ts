@@ -1,4 +1,4 @@
-import type { SessionSubmission } from "@isa-drill-room/shared";
+import type { SessionSubmission } from "@interpreting-practice/shared";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ContentCatalog } from "../src/content/contentCatalog.js";
 import { ValidationError } from "../src/errors.js";

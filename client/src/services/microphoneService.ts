@@ -1,4 +1,4 @@
-import type { Lang, SpanishLocale } from "@isa-drill-room/shared";
+import type { Lang, SpanishLocale } from "@interpreting-practice/shared";
 
 export type MicrophoneStatus = "unknown" | "unsupported" | "blocked" | "ready";
 

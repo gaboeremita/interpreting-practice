@@ -1,4 +1,4 @@
-import type { QuizQuestion } from "@isa-drill-room/shared";
+import type { QuizQuestion } from "@interpreting-practice/shared";
 import { useState } from "react";
 import { classNames } from "../lib/classNames";
 import { Button } from "./ui/Button";

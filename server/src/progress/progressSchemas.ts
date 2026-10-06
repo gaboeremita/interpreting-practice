@@ -24,6 +24,7 @@ export const sessionSubmissionSchema = z
 
 export const settingsChangesSchema = z
   .object({
+    voiceSource: z.enum(["browser", "piper"]),
     enVoice: z.string().max(200),
     esVoice: z.string().max(200),
     rate: z.number().min(0.7).max(1.3),

@@ -1,4 +1,4 @@
-import type { Grade } from "@isa-drill-room/shared";
+import type { Grade } from "@interpreting-practice/shared";
 import type { ReactNode } from "react";
 import { classNames } from "../../lib/classNames";
 

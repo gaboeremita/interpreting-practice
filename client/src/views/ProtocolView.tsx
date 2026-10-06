@@ -21,15 +21,14 @@ export function ProtocolView() {
   return (
     <div className="grid gap-4">
       <PageIntro title="Protocol is scored too.">
-        The ISA grades interpretation protocol and customer service skills alongside terminology. Eight quick
-        scenarios, then drill your school's exact scripts.
+        Good interpreting is more than terminology: protocol and customer service count too. Eight quick
+        scenarios, then drill your exact scripts.
       </PageIntro>
       <QuizPanel questions={quiz} />
       <Panel title="Your exact scripts">
         <p>
-          Paste the scripts from your Interpreter School materials, one per line (opening, clarification,
-          closing, and so on). They aren't filled in for you: the published versions differ by account, and
-          you need the wording your rater will hear.
+          Paste your scripts, one per line (opening, clarification, closing, and so on). They aren't filled in
+          for you: the wording differs by account, and you need the exact one you'll use on calls.
         </p>
         <textarea
           value={draft}

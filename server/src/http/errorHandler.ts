@@ -1,4 +1,4 @@
-import type { ApiError } from "@isa-drill-room/shared";
+import type { ApiError } from "@interpreting-practice/shared";
 import type { ErrorRequestHandler, RequestHandler } from "express";
 import { AppError, NotFoundError } from "../errors.js";
 

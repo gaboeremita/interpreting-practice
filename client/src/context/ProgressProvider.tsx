@@ -1,4 +1,4 @@
-import type { Progress, SessionSubmission, Settings } from "@isa-drill-room/shared";
+import type { Progress, SessionSubmission, Settings } from "@interpreting-practice/shared";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { drillApi } from "../api/drillApi";

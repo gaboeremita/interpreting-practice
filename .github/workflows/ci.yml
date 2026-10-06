@@ -33,7 +33,7 @@ jobs:
       - run: npm run typecheck
       - run: npm test
         env:
-          TEST_MONGODB_URI: mongodb://localhost:27017/isa-drill-room-test
+          TEST_MONGODB_URI: mongodb://localhost:27017/interpreting-practice-test
       - run: npm run build
 
   docker:
@@ -41,4 +41,4 @@ jobs:
     needs: check
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t isa-drill-room .
+      - run: docker build -t interpreting-practice .

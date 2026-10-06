@@ -1,4 +1,4 @@
-import type { DrillItem } from "@isa-drill-room/shared";
+import type { DrillItem } from "@interpreting-practice/shared";
 
 export interface ItemBank {
   l4FromEnglish: DrillItem[];

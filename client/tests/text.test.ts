@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { checkAnswer, checkAnyAnswer, initialsOf, normalize, unitWasRendered } from "../src/lib/text";
+import {
+  checkAnswer,
+  checkAnyAnswer,
+  displayOptions,
+  firstWording,
+  initialsOf,
+  normalize,
+  unitWasRendered,
+} from "../src/lib/text";
 
 describe("normalize", () => {
   it("strips accents and punctuation and turns number words into digits", () => {
@@ -45,5 +53,23 @@ describe("unitWasRendered", () => {
 describe("initialsOf", () => {
   it("keeps the first letter of each word and the punctuation", () => {
     expect(initialsOf("Hello, my name is Ana.")).toBe("H, m n i A.");
+  });
+});
+
+describe("displayOptions", () => {
+  it("keeps a word swap inside one option and splits on spaced slashes", () => {
+    expect(displayOptions("Prueba/examen de Fenilcetonuria")).toEqual(["Prueba/examen de Fenilcetonuria"]);
+    expect(displayOptions("whooping cough / pertussis, tos ferina")).toEqual([
+      "whooping cough",
+      "pertussis",
+      "tos ferina",
+    ]);
+  });
+});
+
+describe("firstWording", () => {
+  it("keeps the first choice of each word swap", () => {
+    expect(firstWording("Prueba/examen de Fenilcetonuria")).toBe("Prueba de Fenilcetonuria");
+    expect(firstWording("Electrocardiogram (ECG/EKG)")).toBe("Electrocardiogram (ECG)");
   });
 });

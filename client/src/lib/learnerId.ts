@@ -1,4 +1,4 @@
-const STORAGE_KEY = "isa-drill-learner-id";
+const STORAGE_KEY = "interpreting-practice-learner-id";
 
 /**
  * Anonymous id that ties this browser to its saved progress on the server.

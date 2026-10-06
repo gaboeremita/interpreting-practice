@@ -1,8 +1,9 @@
-import type { DrillItem, Grade, Settings } from "@isa-drill-room/shared";
+import type { DrillItem, Grade, Settings } from "@interpreting-practice/shared";
 import { useRef, useState } from "react";
 import { isTypingInField, useKeydown } from "../hooks/useKeydown";
 import { checkAnswer, checkAnyAnswer, displayOptions, unitWasRendered } from "../lib/text";
 import { microphoneService, speechService } from "../services";
+import { AnswerFixer } from "./AnswerFixer";
 import { Button } from "./ui/Button";
 import { Eyebrow } from "./ui/Eyebrow";
 import { Kbd } from "./ui/Kbd";
@@ -26,7 +27,7 @@ interface RevealPanelProps {
 
 const VERDICT_TEXT: Record<Grade, string> = {
   got: "Exact match with the glossary wording.",
-  close: "Close: a small slip in spelling or wording. The rater wants the exact term.",
+  close: "Close: a small slip in spelling or wording. Aim for the exact term.",
   miss: "Doesn't match the glossary wording.",
 };
 
@@ -34,7 +35,9 @@ const VERDICT_TEXT: Record<Grade, string> = {
 const UNIT_GOT_SHARE = 0.9;
 const UNIT_CLOSE_SHARE = 0.6;
 
-export function RevealPanel({ item, attempt, micUsable, settings, onGrade }: RevealPanelProps) {
+export function RevealPanel({ item: servedItem, attempt, micUsable, settings, onGrade }: RevealPanelProps) {
+  // The sprint holds the item as it was served; a fix made here regrades against the corrected answer.
+  const [item, setItem] = useState(servedItem);
   const units = item.units;
   const answerText = attempt.typed || attempt.heard;
   const target = item.from === "en" ? "es" : "en";
@@ -121,6 +124,8 @@ export function RevealPanel({ item, attempt, micUsable, settings, onGrade }: Rev
           </div>
         )}
       </div>
+
+      <AnswerFixer item={item} onFixed={setItem} />
 
       {item.definition && <p className="max-w-[70ch] text-sm text-ink-soft">{item.definition}</p>}
 

@@ -1,4 +1,4 @@
-import type { DrillItem, Grade } from "@isa-drill-room/shared";
+import type { DrillItem, Grade } from "@interpreting-practice/shared";
 import { shuffled } from "../lib/random";
 import type { ItemBank } from "./itemBank";
 import type { Level } from "./levels";

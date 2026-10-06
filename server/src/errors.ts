@@ -21,3 +21,10 @@ export class NotFoundError extends AppError {
     super(message, 404);
   }
 }
+
+/** A service the API depends on (such as a TTS server) failed or didn't answer. */
+export class UpstreamError extends AppError {
+  constructor(message: string) {
+    super(message, 502);
+  }
+}

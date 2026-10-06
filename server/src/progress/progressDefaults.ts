@@ -1,7 +1,8 @@
-import type { Progress, Settings } from "@isa-drill-room/shared";
+import type { Progress, Settings } from "@interpreting-practice/shared";
 
 export function createDefaultSettings(): Settings {
   return {
+    voiceSource: "browser",
     enVoice: "",
     esVoice: "",
     rate: 0.95,
