@@ -1,7 +1,7 @@
 import type { DrillItem } from "@interpreting-practice/shared";
 import { describe, expect, it } from "vitest";
 import { buildItemBank } from "../src/domain/itemBank";
-import { isLevelUnlocked, LEVELS, nextLevelIndex } from "../src/domain/levels";
+import { isLevelUnlocked, itemCountFor, LEVELS, nextLevelIndex } from "../src/domain/levels";
 import { missedItems, pickSprintItems, secondsFor } from "../src/domain/sprint";
 
 function makeItem(id: string, overrides: Partial<DrillItem> = {}): DrillItem {
@@ -26,7 +26,7 @@ describe("pickSprintItems", () => {
   const pool = Array.from({ length: 30 }, (_, i) => makeItem(`item-${i}`, { weight: 30 - i }));
 
   it("picks the level's item count and ramps from short to long", () => {
-    const picked = pickSprintItems(warmUp!, pool, {});
+    const picked = pickSprintItems(warmUp!, pool, {}, warmUp!.itemCount);
     expect(picked).toHaveLength(warmUp!.itemCount);
     expect(picked.map((item) => item.weight)).toEqual(
       [...picked.map((item) => item.weight)].sort((a, b) => a - b),
@@ -38,11 +38,38 @@ describe("pickSprintItems", () => {
     boxes["item-7"] = 1;
     let hits = 0;
     for (let run = 0; run < 200; run++) {
-      if (pickSprintItems(warmUp!, pool, boxes).some((item) => item.id === "item-7")) {
+      if (pickSprintItems(warmUp!, pool, boxes, warmUp!.itemCount).some((item) => item.id === "item-7")) {
         hits++;
       }
     }
     expect(hits).toBeGreaterThan(180);
+  });
+});
+
+describe("itemCountFor", () => {
+  it("scales the standard count by the sprint length", () => {
+    expect(itemCountFor(0, { sprintLength: "standard", itemCounts: {} })).toBe(10);
+    expect(itemCountFor(0, { sprintLength: "short", itemCounts: {} })).toBe(5);
+    expect(itemCountFor(7, { sprintLength: "long", itemCounts: {} })).toBe(40);
+    expect(itemCountFor(null, { sprintLength: "long", itemCounts: {} })).toBe(24);
+  });
+
+  it("never goes below three items", () => {
+    expect(itemCountFor(6, { sprintLength: "short", itemCounts: {} })).toBe(3);
+  });
+
+  it("prefers the learner's count for a rung", () => {
+    const settings = { sprintLength: "short" as const, itemCounts: { "0": 25, misses: 4 } };
+    expect(itemCountFor(0, settings)).toBe(25);
+    expect(itemCountFor(1, settings)).toBe(5);
+    expect(itemCountFor(null, settings)).toBe(4);
+  });
+});
+
+describe("pickSprintItems count", () => {
+  it("stops at the pool size when asked for more", () => {
+    const pool = [makeItem("a"), makeItem("b")];
+    expect(pickSprintItems(warmUp!, pool, {}, 10)).toHaveLength(2);
   });
 });
 

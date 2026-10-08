@@ -2,7 +2,7 @@ import type { SessionOutcome } from "@interpreting-practice/shared";
 import { useState } from "react";
 import { Banner } from "../components/ui/Banner";
 import { Button } from "../components/ui/Button";
-import { LEVELS } from "../domain/levels";
+import { itemCountFor, LEVELS } from "../domain/levels";
 import type { Sprint, SprintResult } from "../domain/sprint";
 import { createLevelSprint, createMissesSprint } from "../domain/sprint";
 import { useDrillContent } from "../hooks/useDrillContent";
@@ -32,12 +32,23 @@ export function TrainingScreen({ dueCount }: { dueCount: number }) {
 
   async function startLevel(levelIndex: number) {
     await prepareMicrophone();
-    setScreen({ name: "drill", sprint: createLevelSprint(levelIndex, bank, progress.boxes) });
+    setScreen({
+      name: "drill",
+      sprint: createLevelSprint(
+        levelIndex,
+        bank,
+        progress.boxes,
+        itemCountFor(levelIndex, progress.settings),
+      ),
+    });
   }
 
   async function startMisses() {
     await prepareMicrophone();
-    setScreen({ name: "drill", sprint: createMissesSprint(bank, progress.boxes) });
+    setScreen({
+      name: "drill",
+      sprint: createMissesSprint(bank, progress.boxes, itemCountFor(null, progress.settings)),
+    });
   }
 
   async function saveSprint(sprint: Sprint, results: SprintResult[]) {

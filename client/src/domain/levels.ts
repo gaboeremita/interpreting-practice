@@ -1,4 +1,4 @@
-import type { DrillItem } from "@interpreting-practice/shared";
+import type { DrillItem, Settings, SprintLength } from "@interpreting-practice/shared";
 import type { ItemBank } from "./itemBank";
 
 export interface Level {
@@ -7,6 +7,7 @@ export interface Level {
   pickPool: (bank: ItemBank) => DrillItem[];
   /** Seconds per term; long items get their own time. Null means "derive from the item" (boss call). */
   secondsPerItem: number | null;
+  /** Items in a standard-length sprint. */
   itemCount: number;
   audioOnly: boolean;
   isBoss: boolean;
@@ -119,4 +120,44 @@ export function nextLevelIndex(best: Record<string, number>, unlockAll: boolean)
   );
 
   return index === -1 ? LEVELS.length - 1 : index;
+}
+
+/** Settings key for the "redo my misses" sprint's item count; ladder rungs use their index. */
+export const MISSES_KEY = "misses";
+/** Same bounds the API enforces on a learner's item counts. */
+export const MIN_SPRINT_ITEMS = 3;
+export const MAX_SPRINT_ITEMS = 100;
+
+export const SPRINT_LENGTHS: { value: SprintLength; label: string; factor: number }[] = [
+  { value: "short", label: "Short", factor: 0.5 },
+  { value: "standard", label: "Standard", factor: 1 },
+  { value: "long", label: "Long", factor: 2 },
+];
+
+export function levelKey(levelIndex: number | null): string {
+  return levelIndex === null ? MISSES_KEY : String(levelIndex);
+}
+
+export function clampItemCount(count: number): number {
+  return Math.min(MAX_SPRINT_ITEMS, Math.max(MIN_SPRINT_ITEMS, Math.round(count)));
+}
+
+/** The level's item count scaled by the sprint length preset, ignoring per-rung overrides. */
+export function presetItemCount(level: Level, sprintLength: SprintLength): number {
+  const factor = SPRINT_LENGTHS.find((length) => length.value === sprintLength)?.factor ?? 1;
+
+  return clampItemCount(level.itemCount * factor);
+}
+
+/** How many items a sprint asks for: the learner's override for that rung, else the preset's count. */
+export function itemCountFor(
+  levelIndex: number | null,
+  settings: Pick<Settings, "sprintLength" | "itemCounts">,
+): number {
+  const level = levelIndex === null ? MISSES_LEVEL : LEVELS[levelIndex];
+  if (!level) {
+    throw new RangeError(`There is no level ${levelIndex}.`);
+  }
+
+  return settings.itemCounts[levelKey(levelIndex)] ?? presetItemCount(level, settings.sprintLength);
 }

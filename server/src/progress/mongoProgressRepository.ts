@@ -10,7 +10,9 @@ interface ProgressDocument {
   streak?: { last?: string; count?: number };
   scripts?: string;
   unlockAll?: boolean;
-  settings: Settings;
+  /** Documents saved before sprint lengths existed have neither field. */
+  settings: Omit<Settings, "sprintLength" | "itemCounts"> &
+    Partial<Pick<Settings, "sprintLength" | "itemCounts">>;
 }
 
 export class MongoProgressRepository implements ProgressRepository {
@@ -55,6 +57,8 @@ function toProgress(document: ProgressDocument): Progress {
       autoSpeak: document.settings.autoSpeak,
       micOn: document.settings.micOn,
       esLocale: document.settings.esLocale,
+      sprintLength: document.settings.sprintLength ?? "standard",
+      itemCounts: { ...document.settings.itemCounts },
     },
   };
 }

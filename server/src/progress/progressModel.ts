@@ -10,6 +10,8 @@ const settingsSchema = new Schema(
     autoSpeak: { type: Boolean, default: true },
     micOn: { type: Boolean, default: true },
     esLocale: { type: String, enum: ["es-MX", "es-US"], default: "es-MX" },
+    sprintLength: { type: String, enum: ["short", "standard", "long"], default: "standard" },
+    itemCounts: { type: Map, of: Number, default: {} },
   },
   { _id: false },
 );

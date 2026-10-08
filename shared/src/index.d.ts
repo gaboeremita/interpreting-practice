@@ -48,6 +48,9 @@ export type SpanishLocale = "es-MX" | "es-US";
 /** Where voices come from: the browser's own, or the Piper server the API proxies. */
 export type VoiceSource = "browser" | "piper";
 
+/** How many items each sprint holds, relative to the ladder's standard counts. */
+export type SprintLength = "short" | "standard" | "long";
+
 export interface Settings {
   voiceSource: VoiceSource;
   /** Browser voice name or Piper voice id, depending on the source. Empty picks one automatically. */
@@ -58,6 +61,9 @@ export interface Settings {
   autoSpeak: boolean;
   micOn: boolean;
   esLocale: SpanishLocale;
+  sprintLength: SprintLength;
+  /** Item counts that override the preset, keyed by ladder level index or "misses". */
+  itemCounts: Record<string, number>;
 }
 
 export interface Streak {

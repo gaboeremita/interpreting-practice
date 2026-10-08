@@ -94,6 +94,28 @@ describe("HTTP API", () => {
     await request(app).patch(`/api/learners/${learnerId}/settings`).send({ theme: "dark" }).expect(422);
   });
 
+  it("saves sprint lengths and rejects item counts out of range", async () => {
+    const response = await request(app)
+      .patch(`/api/learners/${learnerId}/settings`)
+      .send({ sprintLength: "long", itemCounts: { "3": 30, misses: 5 } })
+      .expect(200);
+    expect(response.body.settings.sprintLength).toBe("long");
+    expect(response.body.settings.itemCounts).toEqual({ "3": 30, misses: 5 });
+
+    await request(app)
+      .patch(`/api/learners/${learnerId}/settings`)
+      .send({ itemCounts: { "0": 2 } })
+      .expect(422);
+    await request(app)
+      .patch(`/api/learners/${learnerId}/settings`)
+      .send({ itemCounts: { "0": 101 } })
+      .expect(422);
+    await request(app)
+      .patch(`/api/learners/${learnerId}/settings`)
+      .send({ itemCounts: { $where: 10 } })
+      .expect(422);
+  });
+
   it("updates settings, scripts and the unlock flag", async () => {
     await request(app).patch(`/api/learners/${learnerId}/settings`).send({ micOn: false }).expect(200);
     await request(app).put(`/api/learners/${learnerId}/scripts`).send({ scripts: "Line one" }).expect(200);

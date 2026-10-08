@@ -38,31 +38,37 @@ export function pickSprintItems(
   level: Level,
   pool: DrillItem[],
   boxes: Record<string, number>,
+  count: number,
   random: () => number = Math.random,
 ): DrillItem[] {
   const chosen = pool
     .map((item) => ({ item, key: random() ** (1 / (BOX_WEIGHTS[boxOf(item.id, boxes)] ?? 1)) }))
     .sort((a, b) => b.key - a.key)
-    .slice(0, level.itemCount)
+    .slice(0, count)
     .map(({ item }) => item);
 
   return level.isBoss ? chosen : chosen.sort((a, b) => a.weight - b.weight);
 }
 
-export function createLevelSprint(levelIndex: number, bank: ItemBank, boxes: Record<string, number>): Sprint {
+export function createLevelSprint(
+  levelIndex: number,
+  bank: ItemBank,
+  boxes: Record<string, number>,
+  count: number,
+): Sprint {
   const level = LEVELS[levelIndex];
   if (!level) {
     throw new RangeError(`There is no level ${levelIndex}.`);
   }
 
-  return { levelIndex, level, items: pickSprintItems(level, level.pickPool(bank), boxes) };
+  return { levelIndex, level, items: pickSprintItems(level, level.pickPool(bank), boxes, count) };
 }
 
-export function createMissesSprint(bank: ItemBank, boxes: Record<string, number>): Sprint {
+export function createMissesSprint(bank: ItemBank, boxes: Record<string, number>, count: number): Sprint {
   return {
     levelIndex: null,
     level: MISSES_LEVEL,
-    items: shuffled(missedItems(bank.all, boxes)).slice(0, MISSES_LEVEL.itemCount),
+    items: shuffled(missedItems(bank.all, boxes)).slice(0, count),
   };
 }
 
