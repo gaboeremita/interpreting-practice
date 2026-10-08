@@ -49,20 +49,22 @@ export function DrillView({ sprint, onEnd }: DrillViewProps) {
 
   return (
     <section className="grid gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2.5">
-        <h2 className="text-xl font-bold font-stretch-semi-condensed">
-          {sprint.levelIndex !== null && `Rung ${sprint.levelIndex + 1} · `}
-          {sprint.level.name}
-        </h2>
+      <div className="grid gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2.5">
+          <h2 className="text-xl font-bold font-stretch-semi-condensed">
+            {sprint.levelIndex !== null && `Rung ${sprint.levelIndex + 1} · `}
+            {sprint.level.name}
+          </h2>
+          <span className="font-mono font-bold text-live">
+            {combo >= 2 && `combo ×${comboMultiplier(combo).toFixed(1)}`}
+            {lives !== null && ` · lives ${"●".repeat(lives)}${"○".repeat(BOSS_LIVES - lives)}`}
+          </span>
+        </div>
         <ProgressPips
           total={sprint.items.length}
           grades={results.map((result) => result.grade)}
           currentIndex={index}
         />
-        <span className="font-mono font-bold text-live">
-          {combo >= 2 && `combo ×${comboMultiplier(combo).toFixed(1)}`}
-          {lives !== null && ` · lives ${"●".repeat(lives)}${"○".repeat(BOSS_LIVES - lives)}`}
-        </span>
       </div>
       <DrillCall
         key={`${index}:${item.id}`}

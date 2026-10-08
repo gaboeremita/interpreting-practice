@@ -10,6 +10,8 @@ export function createDefaultSettings(): Settings {
     autoSpeak: true,
     micOn: true,
     esLocale: "es-MX",
+    sprintLength: "standard",
+    itemCounts: {},
   };
 }
 

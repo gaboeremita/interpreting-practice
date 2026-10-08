@@ -1,9 +1,11 @@
 import { MicBanner } from "../components/MicBanner";
+import { SprintLengthPanel } from "../components/SprintLengthPanel";
 import { Button } from "../components/ui/Button";
 import { Chip } from "../components/ui/Chip";
 import { Kbd } from "../components/ui/Kbd";
 import { PageIntro } from "../components/ui/PageIntro";
-import { isLevelUnlocked, LEVELS, nextLevelIndex, PASS_MARK } from "../domain/levels";
+import { isLevelUnlocked, itemCountFor, LEVELS, nextLevelIndex, PASS_MARK } from "../domain/levels";
+import { useDrillContent } from "../hooks/useDrillContent";
 import { useProgress } from "../hooks/useProgress";
 
 interface LadderViewProps {
@@ -13,6 +15,7 @@ interface LadderViewProps {
 }
 
 export function LadderView({ dueCount, onStartLevel, onStartMisses }: LadderViewProps) {
+  const { bank } = useDrillContent();
   const { progress, setUnlockAll } = useProgress();
   const { best, unlockAll } = progress;
   const nextIndex = nextLevelIndex(best, unlockAll);
@@ -24,6 +27,7 @@ export function LadderView({ dueCount, onStartLevel, onStartMisses }: LadderView
         Hit {Math.round(PASS_MARK * 100)}% on a rung to open the next one.
       </PageIntro>
       <MicBanner />
+      <SprintLengthPanel />
       <div className="flex flex-wrap gap-2.5">
         <Button variant="primary" size="lg" onClick={() => onStartLevel(nextIndex)}>
           Start rung {nextIndex + 1}: {LEVELS[nextIndex]?.name}
@@ -37,6 +41,8 @@ export function LadderView({ dueCount, onStartLevel, onStartMisses }: LadderView
         {LEVELS.map((level, index) => {
           const levelBest = best[String(index)];
           const isOpen = isLevelUnlocked(index, best, unlockAll);
+          // A rung with fewer items than asked for plays all of them.
+          const itemCount = Math.min(itemCountFor(index, progress.settings), level.pickPool(bank).length);
           const timing = level.isBoss ? "75% time" : `${level.secondsPerItem}s each`;
 
           return (
@@ -53,7 +59,7 @@ export function LadderView({ dueCount, onStartLevel, onStartMisses }: LadderView
               <span className="min-w-0">
                 <span className="block text-[1.05rem] font-bold">{level.name}</span>
                 <span className="text-sm text-ink-soft">
-                  {level.description} · {level.itemCount} items · {timing}
+                  {level.description} · {itemCount} items · {timing}
                 </span>
               </span>
               <span className="max-[520px]:col-start-2 max-[520px]:justify-self-start">

@@ -4,17 +4,21 @@ export const learnerParamsSchema = z.object({
   learnerId: z.uuid(),
 });
 
+/** Item counts a learner may set for a rung; the top one also caps a sprint submission. */
+const MIN_SPRINT_ITEMS = 3;
+const MAX_SPRINT_ITEMS = 100;
+
 const gradeSchema = z.enum(["got", "close", "miss"]);
 
 export const sessionSubmissionSchema = z
   .object({
     levelIndex: z.number().int().min(0).max(50).nullable(),
-    plannedCount: z.number().int().min(1).max(100),
+    plannedCount: z.number().int().min(1).max(MAX_SPRINT_ITEMS),
     scoreUnplayed: z.boolean(),
     results: z
       .array(z.object({ itemId: z.string().min(1).max(64), grade: gradeSchema }))
       .min(1)
-      .max(100),
+      .max(MAX_SPRINT_ITEMS),
     playedOn: z.iso.date(),
   })
   .refine((submission) => submission.results.length <= submission.plannedCount, {
@@ -32,6 +36,11 @@ export const settingsChangesSchema = z
     autoSpeak: z.boolean(),
     micOn: z.boolean(),
     esLocale: z.enum(["es-MX", "es-US"]),
+    sprintLength: z.enum(["short", "standard", "long"]),
+    itemCounts: z.record(
+      z.string().regex(/^(?:\d{1,2}|misses)$/),
+      z.number().int().min(MIN_SPRINT_ITEMS).max(MAX_SPRINT_ITEMS),
+    ),
   })
   .partial()
   .strict();

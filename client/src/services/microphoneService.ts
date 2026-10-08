@@ -117,12 +117,14 @@ export class MicrophoneService {
 
     const recognition = new this.Recognition();
     recognition.lang = locale;
-    recognition.continuous = this.handlers.continuous;
+    // Always continuous: a one-phrase session ends after a few silent seconds, and speech that starts
+    // while the next one spins up loses its first syllables. Short answers stop on their first phrase instead.
+    recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 3;
     const transcriptBefore = this.transcript;
 
-    recognition.onresult = (event) => this.handleResult(event, recognition, transcriptBefore);
+    recognition.onresult = (event) => this.handleResult(event, transcriptBefore);
     recognition.onerror = (event) => {
       if (FATAL_ERRORS.includes(event.error)) {
         if (event.error !== "network") {
@@ -151,11 +153,7 @@ export class MicrophoneService {
     }
   }
 
-  private handleResult(
-    event: SpeechRecognitionEvent,
-    recognition: SpeechRecognition,
-    transcriptBefore: string,
-  ): void {
+  private handleResult(event: SpeechRecognitionEvent, transcriptBefore: string): void {
     let finalText = "";
     let interimText = "";
     const alternatives: string[] = [];
@@ -178,12 +176,21 @@ export class MicrophoneService {
     this.transcript = `${transcriptBefore} ${finalText}`.trim();
     this.alternatives = alternatives;
 
-    // Long answers end after a short pause instead of waiting for the clock.
+    const isLongAnswer = this.handlers?.continuous ?? false;
+    this.handlers?.onUpdate(this.transcript, interimText);
+
     clearTimeout(this.silenceTimer);
-    if (recognition.continuous && (this.transcript || interimText)) {
+    if (!isLongAnswer) {
+      // A short answer is done once its first phrase is final.
+      if (finalText.trim()) {
+        this.stop();
+      }
+      return;
+    }
+    // Long answers end after a short pause instead of waiting for the clock.
+    if (this.transcript || interimText) {
       this.silenceTimer = setTimeout(() => this.stop(), SILENCE_STOP_MS);
     }
-    this.handlers?.onUpdate(this.transcript, interimText);
   }
 
   private finish(): void {
